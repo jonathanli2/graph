@@ -15,6 +15,7 @@ import { AlertsService } from '../alerts.service';
 export class CalendarComponent implements OnInit {
 
   public events?: MicrosoftGraph.Event[];
+  public calendars?: MicrosoftGraph.Calendar[];
 
   constructor(
     private authService: AuthService,
@@ -26,6 +27,7 @@ export class CalendarComponent implements OnInit {
       // Convert the user's timezone to IANA format
       const ianaName = findIana(this.authService.user?.timeZone ?? 'UTC');
       const timeZone = ianaName![0].valueOf() || this.authService.user?.timeZone || 'UTC';
+      this.calendars =[];
 
       // Get midnight on the start of the current week in the user's timezone,
       // but in UTC. For example, for Pacific Standard Time, the time value would be
@@ -36,6 +38,15 @@ export class CalendarComponent implements OnInit {
       this.graphService.getCalendars().then(
         (data) => {
           console.log(data);
+          this.calendars = data;
+          var calendarList = '';
+          if (this.calendars) {
+            for (var c of this.calendars) {
+              calendarList = c.name + ' - ' + c.owner?.address;
+              this.alertsService.addSuccess('Calendar:', JSON.stringify(calendarList));
+            }
+          }
+
         }
       );
 
