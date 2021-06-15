@@ -35,15 +35,16 @@ export class GraphService {
     });
   }
 
-  async getSharedCalendarView(start: string, end: string, timeZone: string): Promise<MicrosoftGraph.Event[] | undefined> {
+  async getSharedCalendarView(id: string, start: string, end: string, timeZone: string): Promise<MicrosoftGraph.Event[] | undefined> {
     try {
       // GET /me/calendarview?startDateTime=''&endDateTime=''
       // &$select=subject,organizer,start,end
       // &$orderby=start/dateTime
       // &$top=50
+      let api = '/me/calendars/'+id+'/calendarview';
       const result =  await this.graphClient
         //.api('/me/calendarview')
-        .api('/me/calendars/AQMkADAwATM3ZmYAZS0zZTlmLWRmZWQtMDACLTAwCgBGAAADROfyLq50ykOqJUKVuhAL1QcAXQrMDs2KAUWeg7zVY-VuewAAAgEGAAAAXQrMDs2KAUWeg7zVY-VuewAAAVK9bgAAAA==/calendarview')
+        .api(api)
         .header('Prefer', `outlook.timezone="${timeZone}"`)
         .query({
           startDateTime: start,

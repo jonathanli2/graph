@@ -16,6 +16,8 @@ export class CalendarComponent implements OnInit {
 
   public events?: MicrosoftGraph.Event[];
   public calendars?: MicrosoftGraph.Calendar[];
+  private rtw001 = 'AQMkADAwATM3ZmYAZS0zZTlmLWRmZWQtMDACLTAwCgBGAAADROfyLq50ykOqJUKVuhAL1QcAXQrMDs2KAUWeg7zVY-VuewAAAgEGAAAAXQrMDs2KAUWeg7zVY-VuewAAAVK9cAAAAA==';
+  private rtw002 = 'AQMkADAwATM3ZmYAZS0zZTlmLWRmZWQtMDACLTAwCgBGAAADROfyLq50ykOqJUKVuhAL1QcAXQrMDs2KAUWeg7zVY-VuewAAAgEGAAAAXQrMDs2KAUWeg7zVY-VuewAAAVK9bwAAAA==';
 
   constructor(
     private authService: AuthService,
@@ -42,8 +44,9 @@ export class CalendarComponent implements OnInit {
           var calendarList = '';
           if (this.calendars) {
             for (var c of this.calendars) {
-              calendarList = c.name + ' - ' + c.owner?.address;
-              this.alertsService.addSuccess('Calendar:', JSON.stringify(calendarList));
+              calendarList = c.name + ' - ' + c.owner?.address + '. ' + c.id;
+              console.log(calendarList);
+              // this.alertsService.addSuccess('Calendar:', JSON.stringify(calendarList));
             }
           }
 
@@ -63,7 +66,19 @@ export class CalendarComponent implements OnInit {
           });
 
 
-      this.graphService.getSharedCalendarView(
+      this.graphService.getSharedCalendarView( this.rtw001,
+        startOfWeek.format(),
+        endOfWeek.format(),
+        this.authService.user?.timeZone ?? 'UTC')
+          .then((events) => {
+            if (events) {
+            for( var ee of events) {
+              this.events?.push(ee);
+            }
+          }
+          });
+
+      this.graphService.getSharedCalendarView( this.rtw002,
         startOfWeek.format(),
         endOfWeek.format(),
         this.authService.user?.timeZone ?? 'UTC')
