@@ -59,4 +59,16 @@ export class GraphService {
     }
     return undefined;
   }
+
+  async addEventToCalendar(newEvent: MicrosoftGraph.Event): Promise<void> {
+    try {
+      // POST /me/events
+      await this.graphClient
+        .api('/me/events')
+        .post(newEvent);
+    } catch (error) {
+      throw Error(JSON.stringify(error, null, 2));
+    }
+  }
+
 }

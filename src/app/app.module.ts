@@ -15,6 +15,7 @@ import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { HomeComponent } from './home/home.component';
 import { AlertsComponent } from './alerts/alerts.component';
 import { CalendarComponent } from './calendar/calendar.component';
+import { NewEventComponent } from './new-event/new-event.component';
 
 let msalInstance: IPublicClientApplication | undefined = undefined;
 
@@ -36,7 +37,7 @@ export function MSALInstanceFactory(): IPublicClientApplication {
 }
 
 @NgModule({
-  declarations: [AppComponent, NavBarComponent, HomeComponent, AlertsComponent, CalendarComponent],
+  declarations: [AppComponent, NavBarComponent, HomeComponent, AlertsComponent, CalendarComponent, NewEventComponent],
   imports: [
     BrowserModule,
     FormsModule,
