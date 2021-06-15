@@ -16,8 +16,8 @@ export class CalendarComponent implements OnInit {
 
   public events?: MicrosoftGraph.Event[];
   public calendars?: MicrosoftGraph.Calendar[];
-  private rtw001 = 'AQMkADAwATM3ZmYAZS0zZTlmLWRmZWQtMDACLTAwCgBGAAADROfyLq50ykOqJUKVuhAL1QcAXQrMDs2KAUWeg7zVY-VuewAAAgEGAAAAXQrMDs2KAUWeg7zVY-VuewAAAVK9cAAAAA==';
-  private rtw002 = 'AQMkADAwATM3ZmYAZS0zZTlmLWRmZWQtMDACLTAwCgBGAAADROfyLq50ykOqJUKVuhAL1QcAXQrMDs2KAUWeg7zVY-VuewAAAgEGAAAAXQrMDs2KAUWeg7zVY-VuewAAAVK9bwAAAA==';
+ // private rtw001 = 'AQMkADAwATM3ZmYAZS0zZTlmLWRmZWQtMDACLTAwCgBGAAADROfyLq50ykOqJUKVuhAL1QcAXQrMDs2KAUWeg7zVY-VuewAAAgEGAAAAXQrMDs2KAUWeg7zVY-VuewAAAVK9cAAAAA==';
+ // private rtw002 = 'AQMkADAwATM3ZmYAZS0zZTlmLWRmZWQtMDACLTAwCgBGAAADROfyLq50ykOqJUKVuhAL1QcAXQrMDs2KAUWeg7zVY-VuewAAAgEGAAAAXQrMDs2KAUWeg7zVY-VuewAAAVK9bwAAAA==';
 
   constructor(
     private authService: AuthService,
@@ -44,9 +44,25 @@ export class CalendarComponent implements OnInit {
           var calendarList = '';
           if (this.calendars) {
             for (var c of this.calendars) {
-              calendarList = c.name + ' - ' + c.owner?.address + '. ' + c.id;
-              console.log(calendarList);
-              // this.alertsService.addSuccess('Calendar:', JSON.stringify(calendarList));
+              if (c.owner?.address !== 'wsibtest@outlook.com' && c.id) {
+
+                calendarList = c.name + ' - ' + c.owner?.address + '. ' + c.id;
+                console.log(calendarList);
+                // this.alertsService.addSuccess('Calendar:', JSON.stringify(calendarList));
+
+                this.graphService.getSharedCalendarView( c.id,
+                  startOfWeek.format(),
+                  endOfWeek.format(),
+                  this.authService.user?.timeZone ?? 'UTC')
+                    .then((events) => {
+                      if (events) {
+                      for( var ee of events) {
+                        this.events?.push(ee);
+                      }
+                    }
+                    });
+
+              }
             }
           }
 
@@ -65,7 +81,7 @@ export class CalendarComponent implements OnInit {
           }
           });
 
-
+/*
       this.graphService.getSharedCalendarView( this.rtw001,
         startOfWeek.format(),
         endOfWeek.format(),
@@ -88,7 +104,7 @@ export class CalendarComponent implements OnInit {
               this.events?.push(ee);
             }
           }
-          });
+          });*/
     }
 
     formatDateTimeTimeZone(dateTime: MicrosoftGraph.DateTimeTimeZone | undefined | null): string {

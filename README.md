@@ -1,4 +1,4 @@
-1. Outlook user account
+1. Outlook BA user account
 https://outlook.live.com/mail/0/inbox
 wsibtest@outlook.com
 wsib0001
@@ -10,4 +10,12 @@ wsib0001
 
 registered app
 Calendar
+
+
+3. Outlook RTW user
+rtwuser001@outlook.com
+wsib0001
+
+rtwuser002@outlook.com
+wsib002
 
