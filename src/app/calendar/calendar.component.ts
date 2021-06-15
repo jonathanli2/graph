@@ -22,6 +22,7 @@ export class CalendarComponent implements OnInit {
     private alertsService: AlertsService) { }
 
     ngOnInit() {
+      this.events = [];
       // Convert the user's timezone to IANA format
       const ianaName = findIana(this.authService.user?.timeZone ?? 'UTC');
       const timeZone = ianaName![0].valueOf() || this.authService.user?.timeZone || 'UTC';
@@ -32,12 +33,35 @@ export class CalendarComponent implements OnInit {
       var startOfWeek = moment.tz(timeZone).startOf('week').utc();
       var endOfWeek = moment(startOfWeek).add(7, 'day');
 
-      this.graphService.getCalendarView(
+      this.graphService.getCalendars().then(
+        (data) => {
+          console.log(data);
+        }
+      );
+
+      this.graphService.getMyCalendarView(
         startOfWeek.format(),
         endOfWeek.format(),
         this.authService.user?.timeZone ?? 'UTC')
           .then((events) => {
-            this.events = events;
+            if (events) {
+            for( var ee of events) {
+              this.events?.push(ee);
+            }
+          }
+          });
+
+
+      this.graphService.getSharedCalendarView(
+        startOfWeek.format(),
+        endOfWeek.format(),
+        this.authService.user?.timeZone ?? 'UTC')
+          .then((events) => {
+            if (events) {
+            for( var ee of events) {
+              this.events?.push(ee);
+            }
+          }
           });
     }
 

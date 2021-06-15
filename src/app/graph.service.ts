@@ -35,7 +35,33 @@ export class GraphService {
     });
   }
 
-  async getCalendarView(start: string, end: string, timeZone: string): Promise<MicrosoftGraph.Event[] | undefined> {
+  async getSharedCalendarView(start: string, end: string, timeZone: string): Promise<MicrosoftGraph.Event[] | undefined> {
+    try {
+      // GET /me/calendarview?startDateTime=''&endDateTime=''
+      // &$select=subject,organizer,start,end
+      // &$orderby=start/dateTime
+      // &$top=50
+      const result =  await this.graphClient
+        //.api('/me/calendarview')
+        .api('/me/calendars/AQMkADAwATM3ZmYAZS0zZTlmLWRmZWQtMDACLTAwCgBGAAADROfyLq50ykOqJUKVuhAL1QcAXQrMDs2KAUWeg7zVY-VuewAAAgEGAAAAXQrMDs2KAUWeg7zVY-VuewAAAVK9bgAAAA==/calendarview')
+        .header('Prefer', `outlook.timezone="${timeZone}"`)
+        .query({
+          startDateTime: start,
+          endDateTime: end
+        })
+        .select('subject,organizer,start,end')
+        .orderby('start/dateTime')
+        .top(50)
+        .get();
+
+      return result.value;
+    } catch (error) {
+      this.alertsService.addError('Could not get events', JSON.stringify(error, null, 2));
+    }
+    return undefined;
+  }
+
+  async getMyCalendarView(start: string, end: string, timeZone: string): Promise<MicrosoftGraph.Event[] | undefined> {
     try {
       // GET /me/calendarview?startDateTime=''&endDateTime=''
       // &$select=subject,organizer,start,end
@@ -50,6 +76,25 @@ export class GraphService {
         })
         .select('subject,organizer,start,end')
         .orderby('start/dateTime')
+        .top(50)
+        .get();
+
+      return result.value;
+    } catch (error) {
+      this.alertsService.addError('Could not get events', JSON.stringify(error, null, 2));
+    }
+    return undefined;
+  }
+
+
+  async getCalendars(): Promise<MicrosoftGraph.Calendar[] | undefined> {
+    try {
+      // GET /me/calendarview?startDateTime=''&endDateTime=''
+      // &$select=subject,organizer,start,end
+      // &$orderby=start/dateTime
+      // &$top=50
+      const result =  await this.graphClient
+        .api('/me/calendars')
         .top(50)
         .get();
 
