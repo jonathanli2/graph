@@ -8,6 +8,7 @@ export const OAuthSettings = {
   scopes: [
     "user.read",
     "mailboxsettings.read",
-    "calendars.readwrite"
+    "calendars.readwrite",
+    "calendars.readWrite.shared"
   ]
 };

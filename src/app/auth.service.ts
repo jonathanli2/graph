@@ -32,8 +32,9 @@ export class AuthService {
       .loginPopup(OAuthSettings)
       .toPromise()
       .catch((reason) => {
-        this.alertsService.addError('Login failed',
-          JSON.stringify(reason, null, 2));
+        console.log('Login failed: ' +  JSON.stringify(reason, null, 2));
+        //this.alertsService.addError('Login failed',
+        //  JSON.stringify(reason, null, 2));
       });
 
     if (result) {
@@ -58,7 +59,8 @@ export class AuthService {
       })
       .toPromise()
       .catch((reason) => {
-        this.alertsService.addError('Get token failed', JSON.stringify(reason, null, 2));
+       // this.alertsService.addError('Get token failed', JSON.stringify(reason, null, 2));
+       console.log('Get token failed: ' + JSON.stringify(reason, null, 2) );
       });
 
     if (result) {
